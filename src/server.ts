@@ -13,6 +13,20 @@ app.get("/movies", async (_, res) => {
   res.json(movies);
 });
 
+app.post("/movies", async (req, res) => {
+  await prisma.movie.create({
+    data: {
+      title: "filme de teste",
+      genre_id: 7,
+      language_id: 3,
+      oscar_count: 0,
+      release_date: new Date(2000, 0, 3),
+    },
+  });
+
+  res.status(201).send();
+});
+
 app.listen(port, () => {
   console.log(`servidor executando no http://localhost:${port}`);
 });
