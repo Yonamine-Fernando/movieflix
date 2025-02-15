@@ -82,17 +82,42 @@ app.put("/movies/:id", async (req, res) => {
 app.delete("/movies/:id", async (req, res) => {
   const id = Number(req.params.id);
   try {
-    const movie = await prisma.movie.findUnique({ where: { id } })
-  
+    const movie = await prisma.movie.findUnique({ where: { id } });
+
     if (!movie) {
-      return res.status(404).send({ message: 'o filme não foi encontrado' })
+      return res.status(404).send({ message: "o filme não foi encontrado" });
     }
 
     await prisma.movie.delete({ where: { id } });
   } catch (error) {
-    return res.status(500).send({message: "Não foi possivel remover o registro "})
+    return res
+      .status(500)
+      .send({ message: "Não foi possivel remover o registro " });
   }
   res.status(200).send({ message: "registro removido com sucesso" });
+});
+
+app.get("/movies/:genreName", async (req, res) => {
+  console.log(req.params.genreName);
+  try {
+    const moviesFilteredByGenreName = await prisma.movie.findMany({
+      include: {
+        genres: true,
+        languages: true,
+      },
+      where: {
+        genres: {
+          name: {
+            equals: req.params.genreName,
+            mode: "insensitive",
+          },
+        },
+      },
+    });
+    res.status(200).send(moviesFilteredByGenreName);
+  } catch  {
+    return res.status(500).send({ message: "Erro a Filtrar filme" });
+  }
 });
 
 app.listen(port, () => {
