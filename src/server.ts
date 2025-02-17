@@ -87,7 +87,7 @@ app.delete("/movies/:id", async (req, res) => {
     const movie = await prisma.movie.findUnique({ where: { id } });
 
     if (!movie) {
-      return res.status(404).send({ message: "o filme não foi encontrado" });
+      return res.status(404).send({ message: "O filme não foi encontrado" });
     }
 
     await prisma.movie.delete({ where: { id } });

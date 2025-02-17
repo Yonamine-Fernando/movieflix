@@ -61,7 +61,33 @@
             "description": "Filme não encontrato"
           },
           "500": {
-            "description": "Erro interno"
+            "description": "Falha ao atualizar o registro do filme"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Movie"],
+        "summary": "Remover um filme",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Id do filme a ser deletado",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registro removido com sucesso"
+          },
+          "404": {
+            "description": "O filme não foi encontrado"
+          },
+          "500": {
+            "description": "Não foi possivel remover o registro"
           }
         }
       }
