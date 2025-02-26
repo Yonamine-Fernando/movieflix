@@ -215,6 +215,24 @@ app.put("/genres/:id", async (req, res) => {
   }
 });
 
+app.delete("/genres/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  try {
+    const genre = await prisma.movie.findUnique({ where: { id } });
+
+    if (!genre) {
+      return res.status(404).send({ message: "O Gênero não foi encontrado" });
+    }
+
+    await prisma.movie.delete({ where: { id } });
+  } catch {
+    return res
+      .status(500)
+      .send({ message: "Não foi possivel remover o registro " });
+  }
+  res.status(200).send({ message: "registro removido com sucesso" });
+});
+
 app.listen(port, () => {
   console.log(`servidor executando no http://localhost:${port}`);
 });
