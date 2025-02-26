@@ -122,6 +122,38 @@ app.get("/movies/:genreName", async (req, res) => {
   }
 });
 
+app.post("/genres", async (req, res) => {
+  const { name } = req.body;
+
+  if (!name) {
+    return res.status(400).send({ message: "O nome do gênero é obrigatório." });
+  }
+
+  try {
+    
+    const existingGenre = await prisma.genre.findFirst({
+      where: { name: { equals: name, mode: "insensitive" } },
+    });
+
+    if (existingGenre) {
+      return res.status(409).send({ message: "Esse gênero já existe." });
+    }
+
+    const newGenre = await prisma.genre.create({
+      data: {
+        name,
+      },
+    });
+
+    res.status(201).json(newGenre);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Houve um problema ao adicionar o novo gênero." });
+  }
+});
+
 app.put("/genres/:id", async (req, res) => {
   const { id } = req.params;
   const { name } = req.body;
