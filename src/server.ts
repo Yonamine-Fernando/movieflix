@@ -14,7 +14,20 @@ app.get("/movies", async (_, res) => {
     orderBy: { title: "asc" },
     include: { genres: true, languages: true },
   });
-  res.json(movies);
+  //Cálculo da quantidade total de filmes
+		    const totalMovies = movies.length;
+
+		    // Cálculo da média de duração dos filmes
+		    let totalDuration = 0;
+		    for (let movie of movies) {
+		      totalDuration += movie.duration;
+		    }
+		    const averageDuration = totalMovies > 0 ? totalDuration / totalMovies : 0;
+  res.json({
+    totalMovies,
+    averageDuration,
+    movies,
+  });
 });
 
 app.post("/movies", async (req, res) => {
